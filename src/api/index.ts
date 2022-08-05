@@ -1,14 +1,18 @@
-import { Router } from 'express';
-import { readdirSync } from 'fs';
+import express from 'express';
 
-const router = Router();
+const router = express.Router();
 
-const filesArray = readdirSync(__dirname);
+// import { readdirSync } from 'fs';
 
-filesArray.forEach((file) => {
-	if (!file.includes('.')) {
-		router.use(`/${file}`, require(`./${file}/router`));
-	}
-});
+// const filesArray = readdirSync(__dirname);
+
+// filesArray.forEach((file) => {
+// 	if (!file.includes('.')) {
+// 		router.use(`/${file}`, require(`./${file}/router`));
+// 	}
+// });
+
+import UserRouter from './user/router';
+router.use('/user', UserRouter);
 
 export default router;

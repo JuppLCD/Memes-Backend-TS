@@ -1,18 +1,14 @@
 import path from 'path';
-import express, { Application, ErrorRequestHandler } from 'express';
+import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import dotenv from 'dotenv';
 
-dotenv.config();
+import { CONFIG_ENV } from './config';
 
-const app: Application = express();
-
-// Import api routes
-import routerApi from './api';
+const app = express();
 
 // Settings
-app.set('port', process.env.PORT || 8080);
+app.set('port', CONFIG_ENV.PORT);
 
 // Middlewares
 app.use(express.json());
@@ -23,24 +19,11 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Router api
+import routerApi from './api';
 app.use('/api/v1', routerApi);
 
 // Error Handler
-const errorHandler: ErrorRequestHandler = (error, req, res) => {
-	if (!error) {
-		res.status(404);
-	} else {
-		const errorMessage = typeof error === 'string' ? error : error.message ?? error.menssage;
-		const errorStatus = error.status ?? 500;
-		const errorType = error.type ?? 'internal Server Error';
-
-		res.status(errorStatus).json({
-			statusCode: errorStatus,
-			error: errorType,
-			menssage: errorMessage,
-		});
-	}
-};
+import errorHandler from './utils/errorHandler';
 app.use(errorHandler);
 
 export default app;

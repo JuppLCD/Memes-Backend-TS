@@ -3,7 +3,7 @@ import { UserEntinty } from './UserTypes';
 
 class UserValue implements UserEntinty {
 	uuid: string;
-	constructor(public name: string, public password: string) {
+	constructor(public name: string, public password: string, public email: string) {
 		this.uuid = uuid();
 	}
 }

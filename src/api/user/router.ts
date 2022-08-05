@@ -1,11 +1,22 @@
-import { Router } from 'express';
+import express from 'express';
 
-import User_Controller from './UserController';
-import User_Use_Case from './UserUseCase';
+const router = express.Router();
 
-const router = Router();
+import UserControllerClass from './UserController';
+import UserUseCaseClass from './UserUseCase';
 
-const UserUseCase = new User_Use_Case();
-const UserController = new User_Controller(UserUseCase);
+const UserUseCase = new UserUseCaseClass();
+// ! PROBLEMA, el userUseCase me llega ocmo objeto vacio
+const UserController = new UserControllerClass(UserUseCase);
+
+// Middlewares
+import fromRequest from './../../middlewares/fromRequest';
+
+// Validations
+import RegisterRequest from './../../validations/RegisterRequest';
+import LoginRequest from './../../validations/LoginRequest';
+
+router.post('/register', fromRequest(RegisterRequest), UserController.register);
+router.post('/login', fromRequest(LoginRequest), UserController.login);
 
 export default router;
