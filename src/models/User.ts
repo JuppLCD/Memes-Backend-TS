@@ -9,6 +9,16 @@ export default (sequelize: Sequelize) => {
 				allowNull: false,
 				unique: true,
 			},
+			email: {
+				type: DataTypes.STRING,
+				allowNull: false,
+				unique: true,
+				validate: {
+					isEmail: {
+						msg: 'Must be a valid email address',
+					},
+				},
+			},
 			password: {
 				type: DataTypes.STRING,
 				allowNull: false,

@@ -12,6 +12,6 @@ export interface UserType {
 }
 
 export interface UserRepository {
-	create: (UserValue: UserEntinty) => Promise<UserType | string>;
+	create: (UserValue: UserEntinty) => Promise<UserType>;
 	find: (uuid: string) => Promise<UserType | null>;
 }

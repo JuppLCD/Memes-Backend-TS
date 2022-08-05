@@ -8,23 +8,30 @@ import { CONFIG_ENV } from '../../config';
 import Boom from '@hapi/boom';
 
 class UserController {
-	constructor(private userUseCase: UserRepository) {}
-
-	public async register(req: Request, res: Response, next: NextFunction) {
-		const { name, password, email } = req.body;
-		// ! PROBLEMA, el userUseCase me llega ocmo objeto vacio
-		const user = await this.userUseCase.create(new UserValue(name, password, email));
-
-		if (typeof user === 'string') {
-			next(Boom.conflict('User exist'));
-			return;
-		}
-
-		const accessToken = this.createToken(user.uuid, user.email);
-		res.json({ accessToken });
+	private userUseCase: UserRepository;
+	constructor(userUseCase: UserRepository) {
+		this.userUseCase = userUseCase;
 	}
 
-	public async login(req: Request, res: Response, next: NextFunction) {
+	public register = async (req: Request, res: Response, next: NextFunction) => {
+		const { name, password, email } = req.body;
+		// ! PROBLEMA, el userUseCase me llega ocmo objeto vacio
+		try {
+			const user = await this.userUseCase.create(new UserValue(name, password, email));
+
+			if (typeof user === 'string') {
+				next(Boom.conflict('User exist'));
+				return;
+			}
+
+			const accessToken = this.createToken(user.uuid, user.email);
+			res.json({ accessToken });
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	public login = async (req: Request, res: Response, next: NextFunction) => {
 		const { name, password, email, token } = req.body;
 
 		let login;
@@ -46,7 +53,7 @@ class UserController {
 		}
 		const accessToken = this.createToken(user.uuid, user.email);
 		res.json({ accessToken });
-	}
+	};
 
 	private createToken(id: string, email: string, expiresIn: string = '2 days') {
 		const token = jwt.sign({ id, email }, CONFIG_ENV.ACCESS_TOKEN, { expiresIn });

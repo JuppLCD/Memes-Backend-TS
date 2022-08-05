@@ -3,7 +3,7 @@
 
 @name="user2"
 @password="123"
-@email="ejemplo@ejemplo.com"
+@email="ejemplo@gmail.com"
 ### crear usuario
 POST  {{host}}/register
 Content-Type: application/json

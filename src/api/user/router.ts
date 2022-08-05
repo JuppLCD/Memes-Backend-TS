@@ -6,7 +6,7 @@ import UserControllerClass from './UserController';
 import UserUseCaseClass from './UserUseCase';
 
 const UserUseCase = new UserUseCaseClass();
-// ! PROBLEMA, el userUseCase me llega ocmo objeto vacio
+// ! PROBLEMA, el userUseCase me llega como objeto vacio
 const UserController = new UserControllerClass(UserUseCase);
 
 // Middlewares

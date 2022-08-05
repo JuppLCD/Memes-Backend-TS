@@ -1,41 +1,37 @@
 import bcrypt from 'bcrypt';
+import Boom from '@hapi/boom';
 
 import { User } from '../../db/sequelize.connect';
 import { UserEntinty, UserRepository, UserType } from './UserTypes';
 
 class UserUseCase implements UserRepository {
 	// * Create a new User
-	public async create(UserValue: UserEntinty) {
-		const hasUser = await this.userExist(UserValue.name);
-		if (hasUser) {
-			return 'User Exist';
+	public create = async (UserValue: UserEntinty) => {
+		try {
+			UserValue.password = await this.encryptPassword(UserValue.password);
+
+			const newUser = await User.create({
+				name: UserValue.name,
+				email: UserValue.email,
+				password: UserValue.password,
+				uuid: UserValue.uuid,
+			});
+
+			return this.modelToEntity(newUser);
+		} catch (error) {
+			throw (error as Error).message === 'Validation error' ? Boom.conflict('User exist') : error;
 		}
-
-		UserValue.password = await this.encryptPassword(UserValue.password);
-
-		const newUser = await User.create({
-			name: UserValue.name,
-			password: UserValue.password,
-			uuid: UserValue.uuid,
-		});
-
-		return this.modelToEntity(newUser);
-	}
+	};
 
 	// * Find a User by uuid
-	public async find(uuid: string) {
+	public find = async (uuid: string) => {
 		const user = await User.findOne({ where: { uuid } });
 
 		if (!!user) {
 			return this.modelToEntity(user);
 		}
 		return null;
-	}
-
-	private async userExist(name: string) {
-		const userExist = await User.findOne({ where: { name } });
-		return !!userExist;
-	}
+	};
 
 	private async encryptPassword(password: string) {
 		const salt = await bcrypt.genSalt(10);
