@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserRepository } from './UserTypes';
+import { UserRepository, UserType } from './UserTypes';
 import UserValue from './UserValue';
 
 import jwt from 'jsonwebtoken';
@@ -15,15 +15,8 @@ class UserController {
 
 	public register = async (req: Request, res: Response, next: NextFunction) => {
 		const { name, password, email } = req.body;
-		// ! PROBLEMA, el userUseCase me llega ocmo objeto vacio
 		try {
 			const user = await this.userUseCase.create(new UserValue(name, password, email));
-
-			if (typeof user === 'string') {
-				next(Boom.conflict('User exist'));
-				return;
-			}
-
 			const accessToken = this.createToken(user.uuid, user.email);
 			res.json({ accessToken });
 		} catch (err) {
@@ -32,27 +25,39 @@ class UserController {
 	};
 
 	public login = async (req: Request, res: Response, next: NextFunction) => {
-		const { name, password, email, token } = req.body;
+		const { password, email, token } = req.body;
 
-		let login;
+		if (!token && !email) {
+			throw next(Boom.badData('Invalid data'));
+		}
 
-		if (token) {
-			try {
-				const data = jwt.verify(token, CONFIG_ENV.ACCESS_TOKEN);
-				login = { data };
-			} catch (err) {
-				next(err);
+		try {
+			if (token) {
+				const data: { id: string; email: string } = (await jwt.verify(token, CONFIG_ENV.ACCESS_TOKEN)) as {
+					id: string;
+					email: string;
+				};
+				const user = await this.userUseCase.tokenUser(data.id, data.email);
+
+				if (!user) {
+					throw next(Boom.badData('Invalid data'));
+				}
+
+				res.status(200).end();
 			}
-		} else {
-			login = { name, password, email };
+			if (email && email.trim()) {
+				const user = await this.userUseCase.credentialsUser(email, password);
+
+				if (!user) {
+					throw next(Boom.badData('Invalid data'));
+				}
+
+				const accessToken = this.createToken((user as UserType).uuid, (user as UserType).email);
+				res.json({ accessToken });
+			}
+		} catch (err) {
+			next(err);
 		}
-		// ! TENGO QUE LOGEAR EL USUARIO
-		const user = { uuid: '', email: '' };
-		if (typeof user === 'string') {
-			return;
-		}
-		const accessToken = this.createToken(user.uuid, user.email);
-		res.json({ accessToken });
 	};
 
 	private createToken(id: string, email: string, expiresIn: string = '2 days') {

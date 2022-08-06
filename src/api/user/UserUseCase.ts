@@ -5,17 +5,11 @@ import { User } from '../../db/sequelize.connect';
 import { UserEntinty, UserRepository, UserType } from './UserTypes';
 
 class UserUseCase implements UserRepository {
-	// * Create a new User
 	public create = async (UserValue: UserEntinty) => {
 		try {
 			UserValue.password = await this.encryptPassword(UserValue.password);
 
-			const newUser = await User.create({
-				name: UserValue.name,
-				email: UserValue.email,
-				password: UserValue.password,
-				uuid: UserValue.uuid,
-			});
+			const newUser = await User.create({ ...UserValue });
 
 			return this.modelToEntity(newUser);
 		} catch (error) {
@@ -23,12 +17,24 @@ class UserUseCase implements UserRepository {
 		}
 	};
 
-	// * Find a User by uuid
-	public find = async (uuid: string) => {
-		const user = await User.findOne({ where: { uuid } });
+	public tokenUser = async (uuid: string, email: string) => {
+		const user = await User.findOne({ where: { uuid, email } });
 
 		if (!!user) {
 			return this.modelToEntity(user);
+		}
+		return null;
+	};
+
+	public credentialsUser = async (email: string, password: string) => {
+		const user = await User.findOne({
+			where: { email },
+		});
+
+		if (!!user) {
+			const isValid = await this.comparePassword(password, (user as any).password);
+			const userV = isValid ? this.modelToEntity(user) : null;
+			return userV;
 		}
 		return null;
 	};
@@ -43,7 +49,7 @@ class UserUseCase implements UserRepository {
 
 	private modelToEntity(model: unknown) {
 		const toUserEntity = model as UserEntinty;
-		return { name: toUserEntity.name, uuid: toUserEntity.uuid } as UserType;
+		return { email: toUserEntity.email, uuid: toUserEntity.uuid } as UserType;
 	}
 }
 

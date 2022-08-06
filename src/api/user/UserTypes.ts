@@ -13,5 +13,6 @@ export interface UserType {
 
 export interface UserRepository {
 	create: (UserValue: UserEntinty) => Promise<UserType>;
-	find: (uuid: string) => Promise<UserType | null>;
+	tokenUser: (uuid: string, email: string) => Promise<UserType | null>;
+	credentialsUser: (email: string, password: string) => Promise<UserType | null>;
 }

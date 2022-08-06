@@ -7,6 +7,10 @@ export default (sequelize: Sequelize) => {
 			name: {
 				type: DataTypes.STRING,
 				allowNull: false,
+			},
+			uuid: {
+				type: DataTypes.STRING,
+				allowNull: false,
 				unique: true,
 			},
 			email: {

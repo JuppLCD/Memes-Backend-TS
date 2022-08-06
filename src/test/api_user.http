@@ -1,5 +1,5 @@
 @host= http://localhost:8080/api/v1/user
-@token1=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjUzNTEwNTkzLCJleHAiOjE2NTM2ODMzOTN9.sNpc94bOOQ8Z6D3tKGOn8XgBTRMhm60fP6wI5sZ-F1o
+@token1=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI5ZTZmZTBjLWI1NTItNGYwYy04ZTlhLWM3Yjk0NzMyMWE4NiIsImVtYWlsIjoiZWplbXBsb0BnbWFpbC5jb20iLCJpYXQiOjE2NTk4MTg2MjcsImV4cCI6MTY1OTk5MTQyN30.O3CW4QEFWGyQFdurfc3pzPxxb0lCmjnb_AT4NHJu9c4
 
 @name="user2"
 @password="123"
@@ -13,14 +13,6 @@ Content-Type: application/json
 "email": {{email}} ,
 "password": {{password}},
 "passwordConfirm": {{password}}
-}
-### login sin token (userName)
-POST {{host}}/login
-Content-Type: application/json
-
-{
-"name": {{name}},
-"password": {{password}}
 }
 ### login sin token (email)
 POST {{host}}/login
