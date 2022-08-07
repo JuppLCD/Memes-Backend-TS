@@ -2,18 +2,17 @@ import bcrypt from 'bcrypt';
 import Boom from '@hapi/boom';
 
 import { User } from '../../db/sequelize.connect';
-import { UserEntinty, UserRepository, UserType } from './UserTypes';
+import { UserValueType, UserUseCaseType, UserType } from './Types';
 
-class UserUseCase implements UserRepository {
-	public create = async (UserValue: UserEntinty) => {
+class UserUseCase implements UserUseCaseType {
+	public create = async (UserValue: UserValueType) => {
+		UserValue.password = await this.encryptPassword(UserValue.password);
 		try {
-			UserValue.password = await this.encryptPassword(UserValue.password);
-
 			const newUser = await User.create({ ...UserValue });
 
 			return this.modelToEntity(newUser);
 		} catch (error) {
-			throw (error as Error).message === 'Validation error' ? Boom.conflict('User exist') : error;
+			throw Boom.conflict('User exist');
 		}
 	};
 
@@ -48,8 +47,8 @@ class UserUseCase implements UserRepository {
 	}
 
 	private modelToEntity(model: unknown) {
-		const toUserEntity = model as UserEntinty;
-		return { email: toUserEntity.email, uuid: toUserEntity.uuid } as UserType;
+		const toUserEntity = model as UserValueType;
+		return { email: toUserEntity.email, uuid: toUserEntity.uuid, name: toUserEntity.name } as UserType;
 	}
 }
 

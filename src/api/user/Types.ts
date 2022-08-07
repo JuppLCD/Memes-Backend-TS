@@ -1,4 +1,4 @@
-export interface UserEntinty {
+export interface UserValueType {
 	uuid: string;
 	name: string;
 	email: string;
@@ -11,8 +11,8 @@ export interface UserType {
 	name: string;
 }
 
-export interface UserRepository {
-	create: (UserValue: UserEntinty) => Promise<UserType>;
+export interface UserUseCaseType {
+	create: (UserValue: UserValueType) => Promise<UserType>;
 	tokenUser: (uuid: string, email: string) => Promise<UserType | null>;
 	credentialsUser: (email: string, password: string) => Promise<UserType | null>;
 }

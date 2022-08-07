@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
-import { UserEntinty } from './UserTypes';
+import { UserValueType } from './Types';
 
-class UserValue implements UserEntinty {
+class UserValue implements UserValueType {
 	uuid: string;
 	constructor(public name: string, public password: string, public email: string) {
 		this.uuid = uuid();
