@@ -47,7 +47,7 @@ Content-Type: application/json
 
 {
     "name": string,
-    "acces": boolean (optional),
+    "access": 'false' | 'true',
     "file" : file (img)
 }
 ```
