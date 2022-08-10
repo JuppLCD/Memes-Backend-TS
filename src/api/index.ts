@@ -15,4 +15,7 @@ const router = express.Router();
 import UserRouter from './user/router';
 router.use('/user', UserRouter);
 
+import MemeRouter from './meme/router';
+router.use('/meme', MemeRouter);
+
 export default router;

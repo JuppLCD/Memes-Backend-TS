@@ -1,3 +1,4 @@
+// CREAR
 export interface UserValueType {
 	uuid: string;
 	name: string;
@@ -5,6 +6,7 @@ export interface UserValueType {
 	password: string;
 }
 
+// SE ENVIA, (EN CASO DE QUE ALLA DATOS SENCIBLES)
 export interface UserType {
 	uuid: string;
 	email: string;

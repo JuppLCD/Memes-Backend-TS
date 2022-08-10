@@ -1,0 +1,13 @@
+@host= http://localhost:8080/api/v1/meme
+@token1=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI5ZTZmZTBjLWI1NTItNGYwYy04ZTlhLWM3Yjk0NzMyMWE4NiIsImVtYWlsIjoiZWplbXBsb0BnbWFpbC5jb20iLCJpYXQiOjE2NTk4MTg2MjcsImV4cCI6MTY1OTk5MTQyN30.O3CW4QEFWGyQFdurfc3pzPxxb0lCmjnb_AT4NHJu9c4
+
+@name="nameImg"
+@access=true
+### crear usuario
+POST  {{host}}/create
+Content-Type: application/json
+
+{
+"name": {{name}},
+"access": {{access}},
+}

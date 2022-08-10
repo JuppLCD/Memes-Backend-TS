@@ -12,10 +12,10 @@ class Token {
 		return token;
 	}
 
-	static getDataToken =  (token: string) => {
-		const data: TokenDataType = ( jwt.verify(token, CONFIG_ENV.ACCESS_TOKEN)) as TokenDataType;
+	static getDataToken(token: string) {
+		const data: TokenDataType = jwt.verify(token, CONFIG_ENV.ACCESS_TOKEN) as TokenDataType;
 		return data;
-	};
+	}
 }
 
 export default Token;
