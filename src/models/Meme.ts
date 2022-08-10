@@ -1,9 +1,9 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import { Meme } from '../db/sequelize.connect';
+import { User } from '../db/sequelize.connect';
 
 export default (sequelize: Sequelize) => {
-	const User = sequelize.define(
-		'User',
+	const Meme = sequelize.define(
+		'Meme',
 		{
 			name: {
 				type: DataTypes.STRING,
@@ -14,27 +14,30 @@ export default (sequelize: Sequelize) => {
 				allowNull: false,
 				unique: true,
 			},
-			email: {
+			path_image: {
 				type: DataTypes.STRING,
 				allowNull: false,
-				unique: true,
-				validate: {
-					isEmail: {
-						msg: 'Must be a valid email address',
-					},
-				},
 			},
-			password: {
+			user_id: {
 				type: DataTypes.STRING,
+				references: {
+					model: 'users',
+					key: 'uuid',
+				},
+				allowNull: false,
+			},
+			access: {
+				type: DataTypes.BOOLEAN,
 				allowNull: false,
 			},
 		},
 		{
-			tableName: 'users',
+			tableName: 'memes',
 			timestamps: false,
 		}
 	);
-	// User.hasMany(Meme, { as: 'memes', foreignKey: 'user_id', onDelete: 'cascade' });
+	// access --> 0 = private, 1 = public
+	// Meme.belongsTo(User, { foreignKey: 'user_id' });
 
-	return User;
+	return Meme;
 };
