@@ -1,8 +1,15 @@
-import { Sequelize, DataTypes } from 'sequelize';
-import { Meme } from '../db/sequelize.connect';
+import { Sequelize, DataTypes, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
+// import { Meme } from '../db/sequelize.connect';
+
+export interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
+	name: string;
+	uuid: string;
+	email: string;
+	password: string;
+}
 
 export default (sequelize: Sequelize) => {
-	const User = sequelize.define(
+	const User = sequelize.define<UserModel>(
 		'User',
 		{
 			name: {
@@ -13,6 +20,7 @@ export default (sequelize: Sequelize) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 				unique: true,
+				primaryKey: true,
 			},
 			email: {
 				type: DataTypes.STRING,

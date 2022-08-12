@@ -1,8 +1,16 @@
-import { Sequelize, DataTypes } from 'sequelize';
-import { User } from '../db/sequelize.connect';
+import { Sequelize, DataTypes, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
+// import { User } from '../db/sequelize.connect';
+
+export interface MemeModel extends Model<InferAttributes<MemeModel>, InferCreationAttributes<MemeModel>> {
+	name: string;
+	uuid: string;
+	path_image: string;
+	user_id: string;
+	access: boolean;
+}
 
 export default (sequelize: Sequelize) => {
-	const Meme = sequelize.define(
+	const Meme = sequelize.define<MemeModel>(
 		'Meme',
 		{
 			name: {
@@ -13,6 +21,7 @@ export default (sequelize: Sequelize) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 				unique: true,
+				primaryKey: true,
 			},
 			path_image: {
 				type: DataTypes.STRING,

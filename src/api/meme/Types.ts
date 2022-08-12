@@ -17,5 +17,5 @@ export interface MemeValueType {
 // }
 
 export interface MemeUseCaseType {
-	create: (MemeValue: MemeValueType) => void;
+	create: (MemeValue: MemeValueType) => Promise<MemeValueType>;
 }

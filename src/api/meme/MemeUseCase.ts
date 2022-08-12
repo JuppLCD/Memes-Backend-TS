@@ -1,3 +1,4 @@
+import fs from 'fs';
 import Boom from '@hapi/boom';
 
 import { Meme } from '../../db/sequelize.connect';
@@ -5,15 +6,29 @@ import { MemeValueType, MemeUseCaseType } from './Types';
 
 class MemeUseCase implements MemeUseCaseType {
 	public create = async (MemeValue: MemeValueType) => {
-		// TODO: Deberia ver si el usuario que guarda esta imagen ya tiene una imagen con e mismo nombre, en ese caso debo hacer un upload de dicho meme, en otro caso, debo guardarlo.
 		try {
-			const newMeme = await Meme.create({ ...MemeValue });
-			return newMeme;
+			const meme = await Meme.findOne({ where: { user_id: MemeValue.user_id, name: MemeValue.name } });
+
+			if (meme) {
+				const oldPathImage = meme.path_image;
+				await meme.update({ path_image: MemeValue.path_image });
+				await meme.save();
+
+				this.deleteMeme(oldPathImage);
+
+				return meme as MemeValueType;
+			} else {
+				const newMeme = await Meme.create({ ...MemeValue });
+				return newMeme as MemeValueType;
+			}
 		} catch (err) {
-			// * Ver que error deberia colocar
 			throw Boom.serverUnavailable();
 		}
 	};
+
+	private deleteMeme(pathImage: string) {
+		if (fs.existsSync(pathImage)) fs.unlinkSync(pathImage);
+	}
 }
 
 export default MemeUseCase;

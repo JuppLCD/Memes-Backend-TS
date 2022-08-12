@@ -3,6 +3,7 @@ import Boom from '@hapi/boom';
 
 import { User } from '../../db/sequelize.connect';
 import { UserValueType, UserUseCaseType, UserType } from './Types';
+import { UserModel } from '../../models/User';
 
 class UserUseCase implements UserUseCaseType {
 	public create = async (UserValue: UserValueType) => {
@@ -46,9 +47,8 @@ class UserUseCase implements UserUseCaseType {
 		return await bcrypt.compare(password, receivedPassword);
 	}
 
-	private modelToEntity(model: unknown) {
-		const toUserEntity = model as UserValueType;
-		return { email: toUserEntity.email, uuid: toUserEntity.uuid, name: toUserEntity.name } as UserType;
+	private modelToEntity(model: UserModel) {
+		return { email: model.email, uuid: model.uuid, name: model.name } as UserType;
 	}
 }
 
