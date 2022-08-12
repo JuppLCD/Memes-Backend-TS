@@ -18,4 +18,5 @@ export interface MemeValueType {
 
 export interface MemeUseCaseType {
 	create: (MemeValue: MemeValueType) => Promise<MemeValueType>;
+	updateName: (MemeToUpdate: { user_id: string; name: any; meme_id: string }) => Promise<MemeValueType>;
 }

@@ -1,4 +1,6 @@
 import fs from 'fs';
+import path from 'path';
+
 import Boom from '@hapi/boom';
 
 import { Meme } from '../../db/sequelize.connect';
@@ -16,18 +18,33 @@ class MemeUseCase implements MemeUseCaseType {
 
 				this.deleteMeme(oldPathImage);
 
-				return meme as MemeValueType;
+				return meme;
 			} else {
 				const newMeme = await Meme.create({ ...MemeValue });
-				return newMeme as MemeValueType;
+				return newMeme;
 			}
 		} catch (err) {
 			throw Boom.serverUnavailable();
 		}
 	};
 
+	public updateName = async (MemeToUpdate: { user_id: string; name: any; meme_id: string }) => {
+		// Solo puede editar el usuario que creo el meme (no hay sistemas de roles)
+		const meme = await Meme.findOne({ where: { uuid: MemeToUpdate.meme_id, user_id: MemeToUpdate.user_id } });
+
+		if (meme === null) {
+			throw Boom.forbidden();
+		}
+
+		await meme.update({ name: MemeToUpdate.name });
+		await meme.save();
+
+		return meme;
+	};
+
 	private deleteMeme(pathImage: string) {
-		if (fs.existsSync(pathImage)) fs.unlinkSync(pathImage);
+		const pathIMG = path.join(__dirname, '../../storage/imgs', pathImage);
+		if (fs.existsSync(pathIMG)) fs.unlinkSync(pathIMG);
 	}
 }
 

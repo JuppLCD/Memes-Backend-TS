@@ -3,11 +3,25 @@
 
 @name="nameImg"
 @access=true
-### crear usuario
+
+@idMeme=b3f723f5-02d2-4217-8749-5de921e4e5ad
+
+### Create Meme
 POST  {{host}}/create
 Content-Type: application/json
+authorization: {{token1}}
 
 {
 "name": {{name}},
-"access": {{access}},
+"access": {{access}}
+### file, no se como colocar un archivo, echo en PostMan
+}
+
+### Update Meme
+POST  {{host}}/update/{{idMeme}}
+Content-Type: application/json
+authorization: {{token1}}
+
+{
+"name": {{name}}
 }

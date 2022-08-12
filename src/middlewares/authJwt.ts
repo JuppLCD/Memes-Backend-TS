@@ -8,7 +8,6 @@ export default function (req: Request, res: Response, next: NextFunction) {
 	if (token) {
 		try {
 			const data = Token.getDataToken(token);
-			// const data = jwt.verify(token, CONFIG_ENV.ACCESS_TOKEN);
 			req.body.dataToken = data;
 			next();
 		} catch (err) {

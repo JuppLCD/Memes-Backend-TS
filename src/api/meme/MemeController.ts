@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { MemeUseCaseType, MemeValueType } from './Types';
+import { MemeUseCaseType } from './Types';
 import MemeValue from './MemeValue';
 
 import Boom from '@hapi/boom';
@@ -21,10 +21,30 @@ class MemeController {
 			path_image: `${req.file?.filename}`,
 		};
 		try {
-			await this.MemeUseCase.create(
+			if (req.file?.filename === undefined) {
+				throw Boom.badData();
+			}
+			const meme = await this.MemeUseCase.create(
 				new MemeValue(newMemeObj.name, newMemeObj.access, newMemeObj.user_id, newMemeObj.path_image)
 			);
-			res.send(200).end();
+			res.json(meme);
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	public update = async (req: Request, res: Response, next: NextFunction) => {
+		const data = Token.getDataToken(req.body.token);
+
+		const datosCambiar = {
+			user_id: data.id,
+			name: req.body.name,
+			meme_id: req.params.id,
+		};
+
+		try {
+			const meme = await this.MemeUseCase.updateName(datosCambiar);
+			res.json(meme);
 		} catch (err) {
 			next(err);
 		}

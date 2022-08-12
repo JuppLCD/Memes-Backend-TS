@@ -39,15 +39,28 @@ authorization: token
 
 ### Memes
 
-##### Create Meme
+##### Create Meme (if the user sends a meme with a name already used by that user, the new meme replaces the old one)
 
 ```
 POST /api/v1/meme/create
 Content-Type: application/json
+authorization: token
 
 {
     "name": string,
     "access": 'false' | 'true',
     "file" : file (img)
+}
+```
+
+##### Update name Meme
+
+```
+Put /api/v1/meme/update/:id
+Content-Type: application/json
+authorization: token
+
+{
+    "name": string,
 }
 ```

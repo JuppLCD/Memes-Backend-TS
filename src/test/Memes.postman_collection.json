@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "78233b19-1e4c-49af-99ce-3dc409ca8823",
+		"name": "Memes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18495341"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"name\": \"user50\",\r\n    \"email\": \"email@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"passwordConfirm\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/user/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"register"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login (no token)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"email@gmail.com\",\r\n    \"password\": \"123\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login (token)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRhYmJjNjA5LTAzNDItNGY1ZS1hMjQ3LTgyNjBmNTg4OTViMSIsImVtYWlsIjoiZW1haWxAZ21haWwuY29tIiwiaWF0IjoxNjYwMzQwNzkzLCJleHAiOjE2NjA1MTM1OTN9.AfcdqT32vKTgdnvd6mteCKY9oBRYYrIg5UrWqiRzXxs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/v1/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"login"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Meme",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRhYmJjNjA5LTAzNDItNGY1ZS1hMjQ3LTgyNjBmNTg4OTViMSIsImVtYWlsIjoiZW1haWxAZ21haWwuY29tIiwiaWF0IjoxNjYwMzQwODE2LCJleHAiOjE2NjA1MTM2MTZ9.bSEyVX0vvsVS4gSrW0D0TGhbuIkOH4yfI5EUUhz7fD0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/loren/Pictures/Saved Pictures/Mascara led.jpg"
+						},
+						{
+							"key": "name",
+							"value": "OTRAmas",
+							"type": "text"
+						},
+						{
+							"key": "access",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/meme/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"meme",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Name Meme",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRhYmJjNjA5LTAzNDItNGY1ZS1hMjQ3LTgyNjBmNTg4OTViMSIsImVtYWlsIjoiZW1haWxAZ21haWwuY29tIiwiaWF0IjoxNjYwMzQwODE2LCJleHAiOjE2NjA1MTM2MTZ9.bSEyVX0vvsVS4gSrW0D0TGhbuIkOH4yfI5EUUhz7fD0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Cambio de nombre 10\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/meme/update/b3f723f5-02d2-4217-8749-5de921e4e5ad",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"meme",
+						"update",
+						"b3f723f5-02d2-4217-8749-5de921e4e5ad"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

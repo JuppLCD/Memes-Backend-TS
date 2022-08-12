@@ -2,6 +2,7 @@ import Boom, { isBoom } from '@hapi/boom';
 import { ErrorRequestHandler } from 'express';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+	console.error(err);
 	let payload;
 	if (!err) {
 		payload = Boom.notFound().output.payload;
