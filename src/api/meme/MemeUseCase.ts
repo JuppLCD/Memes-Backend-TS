@@ -29,11 +29,11 @@ class MemeUseCase implements MemeUseCaseType {
 	};
 
 	public updateName = async (MemeToUpdate: { user_id: string; name: any; meme_id: string }) => {
-		// Solo puede editar el usuario que creo el meme (no hay sistemas de roles)
+		// * Solo puede editar el usuario que creo el meme (no hay sistemas de roles)
 		const meme = await Meme.findOne({ where: { uuid: MemeToUpdate.meme_id, user_id: MemeToUpdate.user_id } });
 
 		if (meme === null) {
-			throw Boom.forbidden();
+			throw Boom.notFound();
 		}
 
 		await meme.update({ name: MemeToUpdate.name });
@@ -46,6 +46,23 @@ class MemeUseCase implements MemeUseCaseType {
 		const pathIMG = path.join(__dirname, '../../storage/imgs', pathImage);
 		if (fs.existsSync(pathIMG)) fs.unlinkSync(pathIMG);
 	}
+
+	public delete = async (meme_id: string, user_id: string) => {
+		const memeToDestroy = await Meme.findOne({ where: { uuid: meme_id, user_id } });
+
+		let resToDelete;
+		if (memeToDestroy) {
+			this.deleteMeme(memeToDestroy.path_image);
+			resToDelete = await memeToDestroy.destroy();
+		} else {
+			throw Boom.notFound();
+		}
+
+		// * Deberia ver que respuesta me da al destruir la entidad
+		// console.log('RESPUESTA ==>>', resToDelete, 'MEME A DESTRUIR ==>>', memeToDestroy);
+
+		return true;
+	};
 }
 
 export default MemeUseCase;

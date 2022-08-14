@@ -56,11 +56,19 @@ authorization: token
 ##### Update name Meme
 
 ```
-Put /api/v1/meme/update/:id
+PUT /api/v1/meme/update/:id
 Content-Type: application/json
 authorization: token
 
 {
     "name": string,
 }
+```
+
+##### Delete Meme
+
+```
+DELETE /api/v1/meme/delete/:id
+authorization: token
+
 ```

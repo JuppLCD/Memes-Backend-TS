@@ -3,7 +3,6 @@ import { MemeUseCaseType } from './Types';
 import MemeValue from './MemeValue';
 
 import Boom from '@hapi/boom';
-import Token from '../../utils/Token';
 
 class MemeController {
 	private MemeUseCase: MemeUseCaseType;
@@ -12,7 +11,7 @@ class MemeController {
 	}
 
 	public create = async (req: Request, res: Response, next: NextFunction) => {
-		const data = Token.getDataToken(req.body.token);
+		const data = req.body.dataToken;
 		const access = req.body?.access ? req.body?.access.toLowerCase() === 'true' : false;
 		const newMemeObj = {
 			name: req.body.name,
@@ -34,7 +33,7 @@ class MemeController {
 	};
 
 	public update = async (req: Request, res: Response, next: NextFunction) => {
-		const data = Token.getDataToken(req.body.token);
+		const data = req.body.dataToken;
 
 		const datosCambiar = {
 			user_id: data.id,
@@ -45,6 +44,20 @@ class MemeController {
 		try {
 			const meme = await this.MemeUseCase.updateName(datosCambiar);
 			res.json(meme);
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	public delete = async (req: Request, res: Response, next: NextFunction) => {
+		const dataUser = req.body.dataToken;
+		const meme_id = req.params.id;
+		try {
+			const isDeleted = await this.MemeUseCase.delete(meme_id, dataUser.id);
+
+			const statusCode = isDeleted ? 200 : 500;
+
+			res.status(statusCode).end();
 		} catch (err) {
 			next(err);
 		}
