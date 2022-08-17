@@ -14,5 +14,6 @@ export default {
 		host: process.env.DB_HOST ?? 'localhost',
 		dialect: `${process.env.DB_DIALECT ?? 'mysql'}`,
 		logging: process.env.DB_LOGGING === 'true',
+		force: process.env.DB_FORCE === 'true',
 	},
 };
