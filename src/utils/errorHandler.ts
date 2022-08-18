@@ -1,23 +1,33 @@
 import Boom, { isBoom } from '@hapi/boom';
 import { ErrorRequestHandler } from 'express';
+import Joi from 'joi';
+import deleteImageError from './deleteImageError';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-	console.error(err);
+	console.log(err);
+
 	let payload;
 	if (!err) {
 		payload = Boom.notFound().output.payload;
 	} else if (isBoom(err)) {
 		payload = err.output.payload;
+	} else if (Joi.isError(err)) {
+		payload = { statusCode: 400, message: err.details, error: 'Error of Validation' };
 	} else {
 		payload = {
-			message: err.message ?? 'Internal Server Error',
-			statusCode: err.status ?? 500,
-			name: err.name ?? 'Internal Server Error',
+			message: 'Internal Server Error',
+			statusCode: 500,
+			error: 'Internal Server Error',
 		};
 	}
-	res
-		.status(payload.statusCode)
-		.json({ error: payload.error, message: payload.message, statusCode: payload.statusCode });
+
+	// Delete Image if exist Error
+	if (err && req.originalUrl.includes('/meme/create')) {
+		deleteImageError(req);
+	}
+
+	const jsonRes = { error: payload.error, message: payload.message, statusCode: payload.statusCode };
+	res.status(jsonRes.statusCode).json(jsonRes);
 };
 
 export default errorHandler;

@@ -1,30 +1,25 @@
-import fs from 'fs';
-import path from 'path';
-
 import Boom from '@hapi/boom';
 
 import { Meme } from '../../db/sequelize.connect';
 import { MemeValueType, MemeUseCaseType } from './Types';
 
+import deleteImage from '../../utils/deleteImage';
+
 class MemeUseCase implements MemeUseCaseType {
 	public create = async (MemeValue: MemeValueType) => {
-		try {
-			const meme = await Meme.findOne({ where: { user_id: MemeValue.user_id, name: MemeValue.name } });
+		const meme = await Meme.findOne({ where: { user_id: MemeValue.user_id, name: MemeValue.name } });
 
-			if (meme) {
-				const oldPathImage = meme.path_image;
-				await meme.update({ path_image: MemeValue.path_image });
-				await meme.save();
+		if (meme) {
+			const oldPathImage = meme.path_image;
+			await meme.update({ path_image: MemeValue.path_image });
+			await meme.save();
 
-				this.deleteMeme(oldPathImage);
+			this.deleteMeme(oldPathImage);
 
-				return meme;
-			} else {
-				const newMeme = await Meme.create({ ...MemeValue });
-				return newMeme;
-			}
-		} catch (err) {
-			throw Boom.serverUnavailable();
+			return meme;
+		} else {
+			const newMeme = await Meme.create({ ...MemeValue });
+			return newMeme;
 		}
 	};
 
@@ -43,8 +38,7 @@ class MemeUseCase implements MemeUseCaseType {
 	};
 
 	private deleteMeme(pathImage: string) {
-		const pathIMG = path.join(__dirname, '../../storage/imgs', pathImage);
-		if (fs.existsSync(pathIMG)) fs.unlinkSync(pathIMG);
+		deleteImage('src/storage/imgs', pathImage);
 	}
 
 	public delete = async (meme_id: string, user_id: string) => {

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request } from 'express';
 
 const router = express.Router();
 
