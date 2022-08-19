@@ -25,3 +25,11 @@ authorization: {{token1}}
 {
 "name": {{name}}
 }
+
+### Get all Memes public
+GET  {{host}}/public
+authorization: {{token1}}
+
+### Get user Memes
+GET  {{host}}/
+authorization: {{token1}}

@@ -1,11 +1,9 @@
 import Boom, { isBoom } from '@hapi/boom';
 import { ErrorRequestHandler } from 'express';
 import Joi from 'joi';
-import deleteImageError from './deleteImageError';
+import deleteImageError from '../utils/deleteImageError';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-	console.log(err);
-
 	let payload;
 	if (!err) {
 		payload = Boom.notFound().output.payload;

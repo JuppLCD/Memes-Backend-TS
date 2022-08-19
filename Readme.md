@@ -39,6 +39,22 @@ authorization: token
 
 ### Memes
 
+##### Get All Memes (publics)
+
+```
+get /api/v1/meme/public
+authorization: token
+
+```
+
+##### Get Memes users
+
+```
+get /api/v1/meme/
+authorization: token
+
+```
+
 ##### Create Meme (if the user sends a meme with a name already used by that user, the new meme replaces the old one)
 
 ```

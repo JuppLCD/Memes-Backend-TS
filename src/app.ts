@@ -23,7 +23,7 @@ import routerApi from './api';
 app.use('/api/v1', routerApi);
 
 // Error Handler
-import errorHandler from './utils/errorHandler';
+import errorHandler from './middlewares/errorHandler';
 app.use(errorHandler);
 
 export default app;
