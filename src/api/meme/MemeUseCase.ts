@@ -38,7 +38,7 @@ class MemeUseCase implements MemeUseCaseType {
 	};
 
 	private deleteMeme(pathImage: string) {
-		deleteImage('src/storage/imgs', pathImage);
+		deleteImage('src/public/storage/imgs', pathImage);
 	}
 
 	public delete = async (meme_id: string, user_id: string) => {

@@ -17,7 +17,7 @@ import authJwt from '../../middlewares/authJwt';
 import MemeRequest from '../../validations/MemeRequest';
 import UpdateMemeRequest from '../../validations/UpdateMemeRequest';
 
-import upload from '../../utils/storage';
+import upload from '../../middlewares/storage';
 
 router.get('/', authJwt, MemeController.user);
 router.get('/public', authJwt, MemeController.publicMemes);
