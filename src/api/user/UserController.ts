@@ -16,7 +16,7 @@ class UserController {
 		try {
 			const user = await this.userUseCase.create(new UserValue(name, password, email));
 			const accessToken = Token.creteToken({ id: user.uuid, email: user.email });
-			res.json({ accessToken });
+			res.json({ accessToken, userInfo: { name: user.name, id: user.uuid } });
 		} catch (err) {
 			next(err);
 		}
@@ -35,8 +35,8 @@ class UserController {
 				res.status(200).end();
 			}
 			if (email && email.trim()) {
-				const { accessToken } = await this.loginCredentials(email, password);
-				res.json({ accessToken });
+				const { accessToken, user } = await this.loginCredentials(email, password);
+				res.json({ accessToken, userInfo: { name: user.name, id: user.uuid } });
 			}
 		} catch (err) {
 			next(err);
