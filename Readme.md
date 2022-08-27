@@ -18,6 +18,8 @@ Content-Type: application/json
 }
 ```
 
+RES => JSON{userInfo: { name: string, id: uuid }, accessToken: string}
+
 ##### Login (no token)
 
 ```
@@ -30,12 +32,16 @@ Content-Type: application/json
 }
 ```
 
+RES => JSON{userInfo: { name: string, id: uuid }, accessToken: string}
+
 ##### Login (token)
 
 ```
 POST /api/v1/user/login
 authorization: token
 ```
+
+RES => JSON{userInfo: { name: string, id: uuid }}
 
 ### Memes
 
@@ -69,7 +75,19 @@ authorization: token
 }
 ```
 
-##### Update name Meme
+##### Rename Meme
+
+```
+PUT /api/v1/meme/rename/:id
+Content-Type: application/json
+authorization: token
+
+{
+    "name": string,
+}
+```
+
+##### Update Meme
 
 ```
 PUT /api/v1/meme/update/:id
@@ -77,7 +95,7 @@ Content-Type: application/json
 authorization: token
 
 {
-    "name": string,
+    "file": file (img),
 }
 ```
 

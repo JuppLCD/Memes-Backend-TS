@@ -9,18 +9,28 @@ class MemeUseCase implements MemeUseCaseType {
 	public create = async (MemeValue: MemeValueType) => {
 		const meme = await Meme.findOne({ where: { user_id: MemeValue.user_id, name: MemeValue.name } });
 
-		if (meme) {
-			const oldPathImage = meme.path_image;
-			await meme.update({ path_image: MemeValue.path_image });
-			await meme.save();
-
-			this.deleteMeme(oldPathImage);
-
-			return meme;
-		} else {
-			const newMeme = await Meme.create({ ...MemeValue });
-			return newMeme;
+		if (meme !== null) {
+			throw Boom.conflict('Meme exist');
 		}
+
+		const newMeme = await Meme.create({ ...MemeValue });
+		return newMeme;
+	};
+
+	public updateMeme = async (MemeToUpdate: { user_id: string; path_image: string; meme_id: string }) => {
+		const meme = await Meme.findOne({ where: { uuid: MemeToUpdate.meme_id, user_id: MemeToUpdate.user_id } });
+
+		if (meme === null) {
+			throw Boom.notFound();
+		}
+
+		const oldPathImage = meme.path_image;
+		await meme.update({ path_image: MemeToUpdate.path_image });
+		await meme.save();
+
+		this.deleteMeme(oldPathImage);
+
+		return meme;
 	};
 
 	public updateName = async (MemeToUpdate: { user_id: string; name: any; meme_id: string }) => {

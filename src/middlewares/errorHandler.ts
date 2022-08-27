@@ -20,7 +20,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 	}
 
 	// Delete Image if exist Error
-	if (err && req.originalUrl.includes('/meme/create')) {
+	if ((err && req.originalUrl.includes('/meme/create')) || req.originalUrl.includes('/meme/update')) {
 		deleteImageError(req);
 	}
 

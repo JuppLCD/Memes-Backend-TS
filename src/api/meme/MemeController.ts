@@ -32,7 +32,7 @@ class MemeController {
 		}
 	};
 
-	public update = async (req: Request, res: Response, next: NextFunction) => {
+	public updateName = async (req: Request, res: Response, next: NextFunction) => {
 		const data = req.body.dataToken;
 
 		const datosCambiar = {
@@ -43,6 +43,25 @@ class MemeController {
 
 		try {
 			const meme = await this.MemeUseCase.updateName(datosCambiar);
+			res.json(meme);
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	public updateMeme = async (req: Request, res: Response, next: NextFunction) => {
+		const data = req.body.dataToken;
+
+		try {
+			if (req.file?.filename === undefined) {
+				throw Boom.badData();
+			}
+			const datosCambiar = {
+				user_id: data.id,
+				meme_id: req.params.id,
+				path_image: req.file?.filename as string,
+			};
+			const meme = await this.MemeUseCase.updateMeme(datosCambiar);
 			res.json(meme);
 		} catch (err) {
 			next(err);

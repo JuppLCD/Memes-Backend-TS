@@ -31,8 +31,8 @@ class UserController {
 
 		try {
 			if (token) {
-				await this.loginToken(token);
-				res.status(200).end();
+				const user = await this.loginToken(token);
+				res.json({ userInfo: { name: user.name, id: user.uuid } });
 			}
 			if (email && email.trim()) {
 				const { accessToken, user } = await this.loginCredentials(email, password);
