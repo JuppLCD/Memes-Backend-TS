@@ -77,6 +77,15 @@ class MemeUseCase implements MemeUseCaseType {
 		return memeToDestroy;
 	};
 
+	public getMeme = async (user_id: string, meme_id: string) => {
+		const UserMeme = await Meme.findAll({ where: { user_id, uuid: meme_id } });
+
+		// if (memeToDestroy === null) {
+		// Tirar algun error
+		// }
+		return UserMeme;
+	};
+
 	public publicMemes = async () => {
 		const allPublicMemes = await Meme.findAll({ where: { access: true } });
 

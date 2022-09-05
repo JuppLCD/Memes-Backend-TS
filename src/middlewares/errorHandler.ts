@@ -12,6 +12,8 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 	} else if (Joi.isError(err)) {
 		payload = { statusCode: 400, message: err.details, error: 'Error of Validation' };
 	} else {
+		console.log(JSON.stringify(err));
+
 		payload = {
 			message: 'Internal Server Error',
 			statusCode: 500,

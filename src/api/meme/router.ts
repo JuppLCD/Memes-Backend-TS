@@ -26,4 +26,6 @@ router.put('/rename/:id', fromRequest(UpdateMemeRequest), authJwt, uuidValidateP
 router.put('/update/:id', upload.single('file'), authJwt, uuidValidateParams, MemeController.updateMeme);
 router.delete('/delete/:id', authJwt, uuidValidateParams, MemeController.delete);
 
+router.get('/:id', authJwt, uuidValidateParams, MemeController.getMeme);
+
 export default router;

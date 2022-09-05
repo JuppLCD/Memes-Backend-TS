@@ -92,6 +92,17 @@ class MemeController {
 		}
 	};
 
+	public getMeme = async (req: Request, res: Response, next: NextFunction) => {
+		const dataUser = req.body.dataToken;
+		const meme_id = req.params.id;
+		try {
+			const userMeme = await this.MemeUseCase.getMeme(dataUser.id, meme_id);
+			res.json(userMeme);
+		} catch (err) {
+			next(err);
+		}
+	};
+
 	public publicMemes = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const allPublicMemes = await this.MemeUseCase.publicMemes();

@@ -23,4 +23,5 @@ export interface MemeUseCaseType {
 	delete: (meme_id: string, user_id: string) => Promise<boolean>;
 	user: (user_id: string) => Promise<MemeValueType[]>;
 	publicMemes: () => Promise<MemeValueType[]>;
+	getMeme: (user_id: string, meme_id: string) => Promise<MemeValueType[]>;
 }

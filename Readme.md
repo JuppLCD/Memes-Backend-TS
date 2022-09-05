@@ -48,7 +48,7 @@ RES => JSON{userInfo: { name: string, id: uuid }}
 ##### Get All Memes (publics)
 
 ```
-get /api/v1/meme/public
+GET /api/v1/meme/public
 authorization: token
 
 ```
@@ -56,7 +56,15 @@ authorization: token
 ##### Get Memes users
 
 ```
-get /api/v1/meme/
+GET /api/v1/meme/
+authorization: token
+
+```
+
+##### Get one Meme
+
+```
+GET /api/v1/meme/:id
 authorization: token
 
 ```
