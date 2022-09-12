@@ -1,6 +1,6 @@
 ## Backend de una APP WEB de Memes
 
-URL_DEPLOY = https://meme-back-end.herokuapp.com/
+URL_DEPLOY =
 
 ### Users
 

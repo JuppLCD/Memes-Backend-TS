@@ -7,21 +7,22 @@ export interface MemeModel extends Model<InferAttributes<MemeModel>, InferCreati
 	path_image: string;
 	user_id: string;
 	access: boolean;
+	template?: string;
 }
 
 export default (sequelize: Sequelize) => {
 	const Meme = sequelize.define<MemeModel>(
 		'Meme',
 		{
-			name: {
-				type: DataTypes.STRING,
-				allowNull: false,
-			},
 			uuid: {
-				type: DataTypes.STRING,
+				type: DataTypes.UUIDV4,
 				allowNull: false,
 				unique: true,
 				primaryKey: true,
+			},
+			name: {
+				type: DataTypes.STRING,
+				allowNull: false,
 			},
 			path_image: {
 				type: DataTypes.STRING,
@@ -38,6 +39,10 @@ export default (sequelize: Sequelize) => {
 			access: {
 				type: DataTypes.BOOLEAN,
 				allowNull: false,
+			},
+			template: {
+				type: DataTypes.STRING,
+				allowNull: true,
 			},
 		},
 		{

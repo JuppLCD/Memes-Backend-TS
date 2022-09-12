@@ -12,16 +12,16 @@ export default (sequelize: Sequelize) => {
 	const User = sequelize.define<UserModel>(
 		'User',
 		{
+			uuid: {
+				type: DataTypes.UUIDV4,
+				allowNull: false,
+				unique: true,
+				primaryKey: true,
+			},
 			name: {
 				type: DataTypes.STRING,
 				allowNull: false,
 				unique: true,
-			},
-			uuid: {
-				type: DataTypes.STRING,
-				allowNull: false,
-				unique: true,
-				primaryKey: true,
 			},
 			email: {
 				type: DataTypes.STRING,
