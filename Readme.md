@@ -79,7 +79,19 @@ authorization: token
 {
     "name": string,
     "access": 'false' | 'true',
-    "file" : file (img)
+    "file" : file (img),
+    "template" (optional) : {
+        url string,
+        texts: [
+            {
+                text:string,
+                fs:number
+                x:number
+                y:number
+                color:string
+            }
+        ]
+    }
 }
 ```
 

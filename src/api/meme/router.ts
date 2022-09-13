@@ -1,12 +1,14 @@
-import express, { Request } from 'express';
+import express from 'express';
 
 const router = express.Router();
 
 import MemeControllerClass from './MemeController';
 import MemeUseCaseClass from './MemeUseCase';
+import TextsMemeUseCaseClass from './TextsMemeUseCase';
 
 const MemeUseCase = new MemeUseCaseClass();
-const MemeController = new MemeControllerClass(MemeUseCase);
+const TextsMemeUseCase = new TextsMemeUseCaseClass();
+const MemeController = new MemeControllerClass(MemeUseCase, TextsMemeUseCase);
 
 // Middlewares
 import fromRequest from './../../middlewares/fromRequest';

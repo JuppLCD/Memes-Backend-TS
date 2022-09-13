@@ -8,7 +8,6 @@ import deleteImage from '../../utils/deleteImage';
 class MemeUseCase implements MemeUseCaseType {
 	public create = async (MemeValue: MemeValueType) => {
 		const meme = await Meme.findOne({ where: { user_id: MemeValue.user_id, name: MemeValue.name } });
-
 		if (meme !== null) {
 			throw Boom.conflict('Meme exist');
 		}

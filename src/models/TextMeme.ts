@@ -15,7 +15,7 @@ export default (sequelize: Sequelize) => {
 		'TextMeme',
 		{
 			uuid: {
-				type: DataTypes.UUIDV4,
+				type: DataTypes.STRING,
 				allowNull: false,
 				unique: true,
 				primaryKey: true,
@@ -29,19 +29,19 @@ export default (sequelize: Sequelize) => {
 				allowNull: false,
 			},
 			x: {
-				type: DataTypes.NUMBER,
+				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
 			y: {
-				type: DataTypes.NUMBER,
+				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
 			fs: {
-				type: DataTypes.NUMBER,
+				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
 			meme_id: {
-				type: DataTypes.UUIDV4,
+				type: DataTypes.STRING,
 				references: {
 					model: 'memes',
 					key: 'uuid',

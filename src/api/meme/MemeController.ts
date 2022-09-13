@@ -1,32 +1,46 @@
 import { NextFunction, Request, Response } from 'express';
-import { MemeUseCaseType } from './Types';
+import { MemeUseCaseType, templateMeme, TextsMemeUseCaseType } from './Types';
 import MemeValue from './MemeValue';
 
 import Boom from '@hapi/boom';
 
 class MemeController {
-	private MemeUseCase: MemeUseCaseType;
-	constructor(MemeUseCase: MemeUseCaseType) {
+	constructor(private MemeUseCase: MemeUseCaseType, private TextsMemeUseCase: TextsMemeUseCaseType) {
 		this.MemeUseCase = MemeUseCase;
+		this.TextsMemeUseCase = TextsMemeUseCase;
 	}
 
 	public create = async (req: Request, res: Response, next: NextFunction) => {
 		const data = req.body.dataToken;
 		const access = req.body?.access ? req.body?.access.toLowerCase() === 'true' : false;
+
 		const newMemeObj = {
 			name: req.body.name,
 			access,
 			user_id: data.id,
 			path_image: `${req.file?.filename}`,
 		};
+		const template = req.body.template ? (JSON.parse(req.body.template) as templateMeme) : undefined;
+
 		try {
 			if (req.file?.filename === undefined) {
 				throw Boom.badData();
 			}
 			const meme = await this.MemeUseCase.create(
-				new MemeValue(newMemeObj.name, newMemeObj.access, newMemeObj.user_id, newMemeObj.path_image)
+				new MemeValue(newMemeObj.name, newMemeObj.access, newMemeObj.user_id, newMemeObj.path_image, template?.url)
 			);
-			res.json(meme);
+			const memeObj = meme.toJSON() as any;
+
+			if (template && template.url) {
+				const texts_meme = await this.TextsMemeUseCase.create(memeObj.uuid, template);
+
+				memeObj.template = {
+					url: memeObj.template,
+					texts: texts_meme.map((text) => text.toJSON()),
+				};
+			}
+
+			res.json(memeObj);
 		} catch (err) {
 			next(err);
 		}

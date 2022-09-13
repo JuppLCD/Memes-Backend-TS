@@ -1,3 +1,6 @@
+import { MemeModel } from '../../models/Meme';
+import { TextMemeModel } from '../../models/TextMeme';
+
 // CREAR
 export interface MemeValueType {
 	uuid: string;
@@ -5,23 +8,32 @@ export interface MemeValueType {
 	access: boolean;
 	user_id: string;
 	path_image: string;
+	template?: string;
 }
 
-// SE ENVIA, (EN CASO DE QUE ALLA DATOS SENCIBLES)
-// export interface MemeType {
-// 	uuid: string;
-// 	name: string;
-// 	access: string;
-// 	user_id: string;
-// 	path_image: string;
-// }
+export interface textMemeType {
+	text: string;
+	x: number;
+	y: number;
+	fs: number;
+	id: string;
+	color: string;
+}
+export interface templateMeme {
+	url: string;
+	texts: textMemeType[];
+}
 
 export interface MemeUseCaseType {
-	create: (MemeValue: MemeValueType) => Promise<MemeValueType>;
-	updateName: (MemeToUpdate: { user_id: string; name: any; meme_id: string }) => Promise<MemeValueType>;
-	updateMeme: (MemeToUpdate: { user_id: string; path_image: string; meme_id: string }) => Promise<MemeValueType>;
+	create: (MemeValue: MemeValueType) => Promise<MemeModel>;
+	updateName: (MemeToUpdate: { user_id: string; name: any; meme_id: string }) => Promise<MemeModel>;
+	updateMeme: (MemeToUpdate: { user_id: string; path_image: string; meme_id: string }) => Promise<MemeModel>;
 	delete: (meme_id: string, user_id: string) => Promise<boolean>;
-	user: (user_id: string) => Promise<MemeValueType[]>;
-	publicMemes: () => Promise<MemeValueType[]>;
-	getMeme: (user_id: string, meme_id: string) => Promise<MemeValueType[]>;
+	user: (user_id: string) => Promise<MemeModel[]>;
+	publicMemes: () => Promise<MemeModel[]>;
+	getMeme: (user_id: string, meme_id: string) => Promise<MemeModel[]>;
+}
+
+export interface TextsMemeUseCaseType {
+	create: (meme_id: string, template: templateMeme) => Promise<TextMemeModel[]>;
 }

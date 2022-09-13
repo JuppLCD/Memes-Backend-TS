@@ -15,7 +15,7 @@ export default (sequelize: Sequelize) => {
 		'Meme',
 		{
 			uuid: {
-				type: DataTypes.UUIDV4,
+				type: DataTypes.STRING,
 				allowNull: false,
 				unique: true,
 				primaryKey: true,
