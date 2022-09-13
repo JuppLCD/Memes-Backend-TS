@@ -2,7 +2,7 @@ import express from 'express';
 
 const router = express.Router();
 
-import UserControllerClass from './UserController';
+import UserControllerClass from './Controller';
 import UserUseCaseClass from './UserUseCase';
 
 const UserUseCase = new UserUseCaseClass();

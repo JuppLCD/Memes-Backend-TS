@@ -2,10 +2,10 @@ import Boom from '@hapi/boom';
 
 import { v4 as uuid } from 'uuid';
 
-import { TextMeme } from '../../db/sequelize.connect';
-import { TextMemeModel } from '../../models/TextMeme';
+import { TextMeme } from '../../../db/sequelize.connect';
+import { TextMemeModel } from '../../../models/TextMeme';
 
-import { templateMeme, textMemeType, TextsMemeUseCaseType } from './Types';
+import { templateMeme, textMemeType, TextsMemeUseCaseType } from '../Types';
 
 class TextsMemeUseCase implements TextsMemeUseCaseType {
 	public create = async (meme_id: string, template: templateMeme) => {

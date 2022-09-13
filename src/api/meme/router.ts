@@ -2,9 +2,9 @@ import express from 'express';
 
 const router = express.Router();
 
-import MemeControllerClass from './MemeController';
-import MemeUseCaseClass from './MemeUseCase';
-import TextsMemeUseCaseClass from './TextsMemeUseCase';
+import MemeControllerClass from './Controller';
+import MemeUseCaseClass from './UseCase/Meme';
+import TextsMemeUseCaseClass from './UseCase/TextsMeme';
 
 const MemeUseCase = new MemeUseCaseClass();
 const TextsMemeUseCase = new TextsMemeUseCaseClass();
@@ -18,7 +18,6 @@ import authJwt from '../../middlewares/authJwt';
 // Validations
 import MemeRequest from '../../validations/MemeRequest';
 import UpdateMemeRequest from '../../validations/UpdateMemeRequest';
-
 import upload from '../../middlewares/storage';
 
 router.get('/', authJwt, MemeController.user);

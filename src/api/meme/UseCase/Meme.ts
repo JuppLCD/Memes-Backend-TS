@@ -1,9 +1,9 @@
 import Boom from '@hapi/boom';
 
-import { Meme } from '../../db/sequelize.connect';
-import { MemeValueType, MemeUseCaseType } from './Types';
+import { Meme, TextMeme } from '../../../db/sequelize.connect';
+import { MemeValueType, MemeUseCaseType } from '../Types';
 
-import deleteImage from '../../utils/deleteImage';
+import deleteImage from '../../../utils/deleteImage';
 
 class MemeUseCase implements MemeUseCaseType {
 	public create = async (MemeValue: MemeValueType) => {
@@ -77,11 +77,18 @@ class MemeUseCase implements MemeUseCaseType {
 	};
 
 	public getMeme = async (user_id: string, meme_id: string) => {
-		const UserMeme = await Meme.findAll({ where: { user_id, uuid: meme_id } });
+		const UserMeme = await Meme.findAll({
+			where: { user_id, uuid: meme_id },
+			include: {
+				as: 'texts',
+				model: TextMeme,
+				required: false,
+				attributes: {
+					exclude: ['meme_id'],
+				},
+			},
+		});
 
-		// if (memeToDestroy === null) {
-		// Tirar algun error
-		// }
 		return UserMeme;
 	};
 
