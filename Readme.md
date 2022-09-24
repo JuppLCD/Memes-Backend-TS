@@ -98,7 +98,7 @@ authorization: token
 ##### Rename Meme
 
 ```
-PUT /api/v1/meme/rename/:id
+PATCH /api/v1/meme/rename/:id
 Content-Type: application/json
 authorization: token
 

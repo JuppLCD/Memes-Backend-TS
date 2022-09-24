@@ -23,7 +23,7 @@ import upload from '../../middlewares/storage';
 router.get('/', authJwt, MemeController.user);
 router.get('/public', authJwt, MemeController.publicMemes);
 router.post('/create', upload.single('file'), fromRequest(MemeRequest), authJwt, MemeController.create);
-router.put('/rename/:id', fromRequest(UpdateMemeRequest), authJwt, uuidValidateParams, MemeController.updateName);
+router.patch('/rename/:id', fromRequest(UpdateMemeRequest), authJwt, uuidValidateParams, MemeController.updateName);
 router.put('/update/:id', upload.single('file'), authJwt, uuidValidateParams, MemeController.updateMeme);
 router.delete('/delete/:id', authJwt, uuidValidateParams, MemeController.delete);
 
