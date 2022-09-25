@@ -33,6 +33,10 @@ class TextsMemeUseCase implements TextsMemeUseCaseType {
 
 		return refactorTexts as TextMemeModel[];
 	}
+
+	public deleteTexts = async (meme_id: string) => {
+		await TextMeme.destroy({ where: { meme_id } });
+	};
 }
 
 export default TextsMemeUseCase;

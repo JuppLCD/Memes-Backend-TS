@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom';
 
 import { Meme, TextMeme } from '../../../db/sequelize.connect';
-import { MemeValueType, MemeUseCaseType } from '../Types';
+import { MemeValueType, MemeUseCaseType, templateMeme } from '../Types';
 
 import deleteImage from '../../../utils/deleteImage';
 
@@ -16,15 +16,15 @@ class MemeUseCase implements MemeUseCaseType {
 		return newMeme;
 	};
 
-	public updateMeme = async (MemeToUpdate: { user_id: string; path_image: string; meme_id: string }) => {
-		const meme = await Meme.findOne({ where: { uuid: MemeToUpdate.meme_id, user_id: MemeToUpdate.user_id } });
+	public updateMeme = async (MemeToUpdate: MemeValueType) => {
+		const meme = await Meme.findOne({ where: { uuid: MemeToUpdate.uuid, user_id: MemeToUpdate.user_id } });
 
 		if (meme === null) {
 			throw Boom.notFound();
 		}
 
 		const oldPathImage = meme.path_image;
-		await meme.update({ path_image: MemeToUpdate.path_image });
+		await meme.update({ ...MemeToUpdate });
 		await meme.save();
 
 		this.deleteMeme(oldPathImage);

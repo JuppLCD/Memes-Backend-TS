@@ -27,7 +27,7 @@ export interface templateMeme {
 export interface MemeUseCaseType {
 	create: (MemeValue: MemeValueType) => Promise<MemeModel>;
 	updateName: (MemeToUpdate: { user_id: string; name: any; meme_id: string }) => Promise<MemeModel>;
-	updateMeme: (MemeToUpdate: { user_id: string; path_image: string; meme_id: string }) => Promise<MemeModel>;
+	updateMeme: (MemeToUpdate: MemeValueType) => Promise<MemeModel>;
 	delete: (meme_id: string, user_id: string) => Promise<boolean>;
 	user: (user_id: string) => Promise<MemeModel[]>;
 	publicMemes: () => Promise<MemeModel[]>;
@@ -36,4 +36,5 @@ export interface MemeUseCaseType {
 
 export interface TextsMemeUseCaseType {
 	create: (meme_id: string, template: templateMeme) => Promise<TextMemeModel[]>;
+	deleteTexts: (meme_id: string) => Promise<void>;
 }

@@ -31,7 +31,7 @@ class MemeController {
 			);
 			const memeObj = meme.toJSON() as any;
 
-			if (template && template.url) {
+			if (template && template.url && template.texts) {
 				const texts_meme = await this.TextsMemeUseCase.create(memeObj.uuid, template);
 
 				memeObj.template = {
@@ -64,18 +64,38 @@ class MemeController {
 	};
 
 	public updateMeme = async (req: Request, res: Response, next: NextFunction) => {
+		// TODO: Modificar para recibir todos los datos y del meme y guardar los cambios
 		const data = req.body.dataToken;
+		const meme_id = req.params.id;
+		const access = req.body?.access ? req.body?.access.toLowerCase() === 'true' : false;
 
 		try {
 			if (req.file?.filename === undefined) {
 				throw Boom.badData();
 			}
-			const datosCambiar = {
-				user_id: data.id,
-				meme_id: req.params.id,
-				path_image: req.file?.filename as string,
-			};
-			const meme = await this.MemeUseCase.updateMeme(datosCambiar);
+			const template = req.body.template ? (JSON.parse(req.body.template) as templateMeme) : undefined;
+
+			const memeToEdit = new MemeValue(req.body.name, access, data.id, `${req.file?.filename}`, template?.url);
+			memeToEdit.uuid = meme_id;
+
+			const meme = await this.MemeUseCase.updateMeme(memeToEdit);
+
+			const memeObj = meme.toJSON() as any;
+
+			if (template && template.url) {
+				await this.TextsMemeUseCase.deleteTexts(memeObj.uuid);
+
+				let texts_meme: any[] = [];
+				if (template.texts) {
+					texts_meme = await this.TextsMemeUseCase.create(memeObj.uuid, template);
+				}
+
+				memeObj.template = {
+					url: memeObj.template,
+					texts: texts_meme.map((text) => text.toJSON()),
+				};
+			}
+
 			res.json(meme);
 		} catch (err) {
 			next(err);
