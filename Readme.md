@@ -1,6 +1,6 @@
 ## Backend de una APP WEB de Memes
 
-URL_DEPLOY =
+URL_DEPLOY = https://memes-backend-ts-production.up.railway.app
 
 ### Users
 
