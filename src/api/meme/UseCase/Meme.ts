@@ -1,33 +1,48 @@
 import Boom from '@hapi/boom';
 
 import { Meme, TextMeme } from '../../../db/sequelize.connect';
-import { MemeValueType, MemeUseCaseType, templateMeme } from '../Types';
+import { MemeValueType, MemeUseCaseType } from '../Types';
 
-import deleteImage from '../../../utils/deleteImage';
+import { uploadFileFirebase, deleteImageFirebase } from '../../../db/firebase';
+import deleteImageOfDisk from '../../../utils/deleteImageOfDisk';
+
+import { CONFIG_ENV } from '../../../config';
 
 class MemeUseCase implements MemeUseCaseType {
-	public create = async (MemeValue: MemeValueType) => {
-		const meme = await Meme.findOne({ where: { user_id: MemeValue.user_id, name: MemeValue.name } });
+	public create = async (memeValue: MemeValueType) => {
+		const meme = await Meme.findOne({ where: { user_id: memeValue.user_id, name: memeValue.name } });
 		if (meme !== null) {
 			throw Boom.conflict('Meme exist');
 		}
+		await this.storeImageFirebase(memeValue.path_image);
 
-		const newMeme = await Meme.create({ ...MemeValue });
+		const url = this.generateUrlOfMeme(memeValue.path_image);
+
+		const newMeme = await Meme.create({
+			...memeValue,
+			path_image: url,
+		});
+
+		this.deleteOfDisk(url);
 		return newMeme;
 	};
 
-	public updateMeme = async (MemeToUpdate: MemeValueType) => {
-		const meme = await Meme.findOne({ where: { uuid: MemeToUpdate.uuid, user_id: MemeToUpdate.user_id } });
+	public updateMeme = async (memeToUpdate: MemeValueType) => {
+		const meme = await Meme.findOne({ where: { uuid: memeToUpdate.uuid, user_id: memeToUpdate.user_id } });
 
 		if (meme === null) {
 			throw Boom.notFound();
 		}
+		await this.storeImageFirebase(memeToUpdate.path_image);
 
 		const oldPathImage = meme.path_image;
-		await meme.update({ ...MemeToUpdate });
+
+		const url = this.generateUrlOfMeme(memeToUpdate.path_image);
+		await meme.update({ ...memeToUpdate, path_image: url });
 		await meme.save();
 
-		this.deleteMeme(oldPathImage);
+		await this.deleteMeme(oldPathImage);
+		this.deleteOfDisk(url);
 
 		return meme;
 	};
@@ -46,16 +61,12 @@ class MemeUseCase implements MemeUseCaseType {
 		return meme;
 	};
 
-	private deleteMeme(pathImage: string) {
-		deleteImage('src/public/storage/imgs', pathImage);
-	}
-
 	public delete = async (meme_id: string, user_id: string) => {
 		const memeToDestroy = await Meme.findOne({ where: { uuid: meme_id, user_id } });
 
 		let resToDelete;
 		if (memeToDestroy) {
-			this.deleteMeme(memeToDestroy.path_image);
+			await this.deleteMeme(memeToDestroy.path_image);
 			resToDelete = await memeToDestroy.destroy();
 		} else {
 			throw Boom.notFound();
@@ -99,6 +110,32 @@ class MemeUseCase implements MemeUseCaseType {
 		// Tirar algun error
 		// }
 		return allPublicMemes;
+	};
+
+	private deleteMeme(pathImage: string) {
+		this.deleteOfDisk(pathImage);
+		const filename = pathImage.split('/o/')[1].split('?alt=media')[0];
+
+		return deleteImageFirebase(filename);
+	}
+
+	private deleteOfDisk(pathImage: string) {
+		const filename = pathImage.split('/o/')[1].split('?alt=media')[0];
+		deleteImageOfDisk(filename);
+	}
+
+	private generateUrlOfMeme(path_image: string) {
+		const bucket = CONFIG_ENV.FIREBASE.bucket.split('//')[1];
+
+		const url = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${path_image}?alt=media`;
+		return url;
+	}
+
+	private storeImageFirebase = async (path_image: string) => {
+		const imgSave = await uploadFileFirebase(path_image);
+		if (!imgSave[0].baseUrl) {
+			throw Boom.serverUnavailable('Error to save image');
+		}
 	};
 }
 

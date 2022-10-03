@@ -73,8 +73,8 @@ authorization: token
 
 ```
 POST /api/v1/meme/create
-Content-Type: application/json
 authorization: token
+(form-data)
 
 {
     "name": string,
@@ -111,8 +111,8 @@ authorization: token
 
 ```
 PUT /api/v1/meme/update/:id
-Content-Type: application/json
 authorization: token
+(form-data)
 
 {
     "name": string,

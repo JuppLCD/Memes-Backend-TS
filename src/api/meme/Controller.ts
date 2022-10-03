@@ -64,7 +64,6 @@ class MemeController {
 	};
 
 	public updateMeme = async (req: Request, res: Response, next: NextFunction) => {
-		// TODO: Modificar para recibir todos los datos y del meme y guardar los cambios
 		const data = req.body.dataToken;
 		const meme_id = req.params.id;
 		const access = req.body?.access ? req.body?.access.toLowerCase() === 'true' : false;

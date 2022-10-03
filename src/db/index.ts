@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 
 if (CONFIG_ENV.DB.force) {
-	const pathStorage = path.join(__dirname, '../public/storage');
+	const pathStorage = path.join(__dirname, '../storage');
 
 	const gitIgnoreContent = fs.readFileSync(path.join(pathStorage, '/imgs/.gitignore'), 'utf-8');
 

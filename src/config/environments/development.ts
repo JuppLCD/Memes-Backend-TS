@@ -16,4 +16,7 @@ export default {
 		logging: process.env.DB_LOGGING === 'true',
 		force: process.env.DB_FORCE === 'true',
 	},
+	FIREBASE: {
+		bucket: process.env.FIREBASE_STORAGE_BUCKET ?? '',
+	},
 };

@@ -1,7 +1,7 @@
 import Boom, { isBoom } from '@hapi/boom';
 import { ErrorRequestHandler } from 'express';
 import Joi from 'joi';
-import deleteImageError from '../utils/deleteImageError';
+import deleteImageOfDisk from '../utils/deleteImageOfDisk';
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 	let payload;
@@ -30,7 +30,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
 	// Delete Image if exist Error
 	if ((err && req.originalUrl.includes('/meme/create')) || req.originalUrl.includes('/meme/update')) {
-		deleteImageError(req);
+		deleteImageOfDisk(`${req.file?.filename}`);
 	}
 
 	const jsonRes = { error: payload.error, message: payload.message, statusCode: payload.statusCode };
