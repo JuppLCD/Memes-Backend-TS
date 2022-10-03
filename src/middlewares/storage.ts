@@ -1,9 +1,10 @@
+import path from 'path';
 import multer from 'multer';
 import { v4 as uuid } from 'uuid';
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, './src/storage/imgs');
+		cb(null, path.join(__dirname, './../storage/imgs'));
 	},
 	filename: function (req, file, cb) {
 		const fileName = file.originalname.replace(' ', '_').toLowerCase();
