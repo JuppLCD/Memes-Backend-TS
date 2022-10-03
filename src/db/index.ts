@@ -8,7 +8,7 @@ import path from 'path';
 if (CONFIG_ENV.DB.force) {
 	const pathStorage = path.join(__dirname, '../storage');
 
-	const gitIgnoreContent = fs.readFileSync(path.join(pathStorage, '/imgs/.gitignore'), 'utf-8');
+	const gitIgnoreContent = '* \n !.gitignore\n';
 
 	fs.rmSync(path.join(pathStorage, '/imgs'), { recursive: true, force: true });
 	fs.mkdirSync(path.join(pathStorage, '/imgs'));
