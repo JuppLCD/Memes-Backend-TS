@@ -2,12 +2,12 @@ import path from 'path';
 import { v4 as uuid } from 'uuid';
 
 import { initializeApp, applicationDefault } from 'firebase-admin/app';
-import { storage } from 'firebase-admin';
+import { storage, credential } from 'firebase-admin';
 
 import { CONFIG_ENV } from '../config';
 
 initializeApp({
-	credential: applicationDefault(),
+	credential: credential.cert(JSON.stringify(CONFIG_ENV.FIREBASE.credential)),
 });
 const storageRef = storage().bucket(CONFIG_ENV.FIREBASE.bucket);
 
