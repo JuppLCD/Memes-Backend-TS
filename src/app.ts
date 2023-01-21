@@ -10,10 +10,15 @@ const app = express();
 // Settings
 app.set('port', CONFIG_ENV.PORT);
 
+const corsOptions = {
+	origin: 'https://memes-react-redux.netlify.app',
+	optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
 // Middlewares
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors(corsOptions));
 
 // static files
 app.use(express.static(path.join(__dirname, 'public')));
